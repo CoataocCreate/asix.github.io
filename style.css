@@ -26,7 +26,6 @@
     background-color: white;
     border-radius: 5px;
     position: absolute;
-    
     padding: 10px;
     text-align: center;
     border-left: 1px solid #ccc;
@@ -35,4 +34,13 @@
     transition: transform 0.3s ease;
     backface-visibility: hidden;
     transform: translateZ(0);
+}
+
+/* Media query for small screens */
+@media (max-width: 600px) {
+    .attr {
+        width: 90%;
+        height: auto;
+        padding: 20px;
+    }
 }
