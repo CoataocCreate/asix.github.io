@@ -83,13 +83,14 @@
 }
 
 .card {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    background-color: var(--primary-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    padding: var(--card-padding);
     width: 300px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 300px;
+    transition: transform var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
 }
 
 .card:hover {
