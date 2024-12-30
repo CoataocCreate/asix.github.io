@@ -1,3 +1,15 @@
+:root {
+    --primary-color: #f9f9f9;
+    --secondary-color: #ddd;
+    --accent-color: #333;
+    --hover-transform: translateY(-10px);
+    --hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --card-padding: 20px;
+    --card-radius: 8px;
+    --transition-duration: 0.3s;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +23,7 @@
 
 #doc {
     background-color: transparent;
-    border: 1px solid #ccc;
+    border: 1px solid var(--secondary-color);
     border-radius: 5px;
     padding: 5px;
 }
@@ -32,10 +44,10 @@
     position: absolute;
     padding: 10px;
     text-align: center;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-left: 1px solid var(--secondary-color);
+    border-right: 1px solid var(--secondary-color);
     will-change: transform;
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-duration) ease;
     backface-visibility: hidden;
     transform: translateZ(0);
 }
@@ -58,17 +70,39 @@
 }
 
 .builtin {
-    color: rgb(10, 240, 6);
-}
-
-.comment {
-    color: green;
-}
-
-.string {
-    color: rgb(255, 166, 0);
-}
-
-.def {
     color: blue;
+}
+
+.card-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 1em;
+    color: #333;
 }
