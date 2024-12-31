@@ -148,3 +148,8 @@
       box-shadow: 0 0 20px rgba(255, 69, 0, 1);
     }
   }
+
+
+.header {
+    padding: 3px;
+}
