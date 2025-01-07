@@ -3,13 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="playground.css">
+    <title>Advanced Snake Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 0 auto;
+            background-color: #f4f4f4;
+        }
+    </style>
 </head>
 <body>
-    <textarea class="kernal" id="kernal"></textarea>
-    <button onclick="exe()">EXE</button>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
 
-    <script src="script.js"></script>
+    <script>
+        class Snake {
+            constructor() {
+                this.body = [
+                    { x: 80, y: 80 },
+                    { x: 60, y: 80 },
+                    { x: 40, y: 80 }
+                ];
+                this.direction = { x: 20, y: 0 };  // Start by moving right
+            }
+
+            move() {
+                const head = { x: this.body[0].x + this.direction.x, y: this.body[0].y + this.direction.y };
+                this.body.unshift(head); // Add new head at the front of the array
+            }
+
+            grow() {
+                // The snake grows by not removing the tail when moving
+                // This is handled automatically by not calling `pop()` in `move()`
+            }
+
+            checkCollision() {
+                const head = this.body[0];
+                // Check if head hits the wall
+                if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+                    return true;
+                }
+                // Check if head hits any part of its body
+                for (let i = 1; i < this.body.length; i++) {
+                    if (head.x === this.body[i].x && head.y === this.body[i].y) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            changeDirection(newDirection) {
+                // Prevent the snake from going in the opposite direction
+                if (newDirection.x === -this.direction.x && newDirection.y === -this.direction.y) return;
+                this.direction = newDirection;
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = 'green';
+                this.body.forEach(segment => {
+                    ctx.fillRect(segment.x, segment.y, 20, 20);
+                });
+            }
+        }
+
+        class Food {
+            constructor() {
+                this.position = this.randomPosition();
+            }
+
+            randomPosition() {
+                const x = Math.floor(Math.random() * (canvas.width / 20)) * 20;
+                const y = Math.floor(Math.random() * (canvas.height / 20)) * 20;
+                return { x, y };
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = 'red';
+                ctx.fillRect(this.position.x, this.position.y, 20, 20);
+            }
+        }
+
+        class Game {
+            constructor(ctx) {
+                this.ctx = ctx;
+                this.snake = new Snake();
+                this.food = new Food();
+                this.score = 0;
+                this.gameOver = false;
+            }
+
+            start() {
+                if (this.gameOver) {
+                    alert(`Game Over! Your score was: ${this.score}`);
+                    this.reset();
+                }
+                this.snake.move();
+                if (this.snake.checkCollision()) {
+                    this.gameOver = true;
+                } else {
+                    if (this.snake.body[0].x === this.food.position.x && this.snake.body[0].y === this.food.position.y) {
+                        this.snake.grow();
+                        this.food = new Food();
+                        this.score++;
+                    }
+                    this.clearCanvas();
+                    this.snake.draw(this.ctx);
+                    this.food.draw(this.ctx);
+                    this.displayScore();
+                    setTimeout(() => this.start(), 100);
+                }
+            }
+
+            clearCanvas() {
+                this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            displayScore() {
+                this.ctx.fillStyle = 'black';
+                this.ctx.font = '16px Arial';
+                this.ctx.fillText(`Score: ${this.score}`, 10, 20);
+            }
+
+            changeDirection(event) {
+                if (event.key === 'ArrowUp') {
+                    this.snake.changeDirection({ x: 0, y: -20 });
+                } else if (event.key === 'ArrowDown') {
+                    this.snake.changeDirection({ x: 0, y: 20 });
+                } else if (event.key === 'ArrowLeft') {
+                    this.snake.changeDirection({ x: -20, y: 0 });
+                } else if (event.key === 'ArrowRight') {
+                    this.snake.changeDirection({ x: 20, y: 0 });
+                }
+            }
+
+            reset() {
+                this.snake = new Snake();
+                this.food = new Food();
+                this.score = 0;
+                this.gameOver = false;
+                this.start();
+            }
+        }
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const game = new Game(ctx);
+
+        window.addEventListener('keydown', (event) => game.changeDirection(event));
+
+        game.start();
+    </script>
 </body>
 </html>
